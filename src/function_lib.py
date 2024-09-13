@@ -60,7 +60,7 @@ def save_model(model: nn.Module, model_name: str, path: str = "../models"):
         print("models directory already exists")
 
     print("Saving model...")
-    torch.save(model, os.path.join(path, model_name + extension))
+    torch.save(model.state_dict(), os.path.join(path, model_name + extension))
     print(f"Model '{model_name}' saved successfully.")
 
 
