@@ -3,6 +3,7 @@ import time
 import torch
 from torchvision import transforms
 import os
+import CNN_lib
 
 
 def crop_to_square(frame):
@@ -84,12 +85,13 @@ if __name__ == "__main__":
     take_picture_and_resize()
 
     tensor_image = load_image_as_tensor_opencv("./captured_image.jpg")
-    # print(tensor_image)
-    # print(tensor_image.shape)
 
     # Ucitamo model koji cemo da koristimo
-    print(os.path.curdir)
-    model = torch.load("../models/EDA_CNN.pth")
+    # print(os.path.curdir)
+    model = CNN_lib.EDA_CNN()
+    model.load_state_dict(
+        torch.load("./models/TEST_WEIGHTS_EDA.pth", weights_only=True)
+    )
     print("Model ucitan, prepoznavanje facijalnih eksrpresija...")
     model.eval()
 
