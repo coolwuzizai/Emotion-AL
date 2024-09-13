@@ -26,7 +26,7 @@ class FullyConnectedNN(nn.Module):
         return x
 
 
-class test_conv_net(nn.Module):
+class SimpleConvNN(nn.Module):
     def __init__(self):
         super().__init__()
 
@@ -93,17 +93,18 @@ class EmotionNet(nn.Module):
 
         return x
 
-    class EDA_CNN(nn.Module):
-        def __init__(self):
-            super().__init__()
 
-            self.layer1 = nn.Conv2d(1, 32, 3)
+class EDA_CNN(nn.Module):
+    def __init__(self):
+        super().__init__()
 
-            self.layer2 = nn.Conv2d(32, 64, 3)
-            self.pool = nn.MaxPool2d(2)
-            self.flatten = nn.Flatten(start_dim=1)
-            self.dense1 = nn.Linear(6400, 64)
-            self.dense2 = nn.Linear(64, 7)
+        self.layer1 = nn.Conv2d(1, 32, 3)
+
+        self.layer2 = nn.Conv2d(32, 64, 3)
+        self.pool = nn.MaxPool2d(2)
+        self.flatten = nn.Flatten(start_dim=1)
+        self.dense1 = nn.Linear(6400, 64)
+        self.dense2 = nn.Linear(64, 7)
 
     def forward(self, x):
 
