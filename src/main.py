@@ -85,18 +85,25 @@ if __name__ == "__main__":
     take_picture_and_resize()
 
     tensor_image = load_image_as_tensor_opencv("./captured_image.jpg")
+    emotions = {
+        0: "Angry",
+        1: "Disgust",
+        2: "Fear",
+        3: "Happy",
+        4: "Neutral",
+        5: "Sad",
+        6: "Surprise",
+    }
 
     # Ucitamo model koji cemo da koristimo
     # print(os.path.curdir)
-    model = CNN_lib.EDA_CNN()
-    model.load_state_dict(
-        torch.load("./models/TEST_WEIGHTS_EDA.pth", weights_only=True)
-    )
+    model = CNN_lib.EmotionNet()
+    model.load_state_dict(torch.load("./models/emoNet.pth", weights_only=True))
     print("Model ucitan, prepoznavanje facijalnih eksrpresija...")
     model.eval()
 
     with torch.no_grad():
         output = model(tensor_image)
-
+        print(output)
         _, predicted_class = torch.max(output, 1)
-        print(f"Predicted class: {predicted_class.item()}")
+        print(f"Predicted class: {emotions[predicted_class.item()]}")
