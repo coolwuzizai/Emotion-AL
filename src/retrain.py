@@ -1,9 +1,22 @@
 import sys
+import argparse
 
+# if len(sys.argv) != 3:
+#     print("Usage: python3 file --iters <n>")
+#     sys.exit(1)
 
-if len(sys.argv) != 3:
-    print("Usage: python3 file --iters <n>")
-    sys.exit(1)
+parser = argparse.ArgumentParser(
+    description="Retrain models require additionall input from user."
+)
+
+parser.add_argument(
+    "--iters",
+    type=int,
+    required=True,
+    help="Number of iterations of re-training(required)",
+)
+
+args = parser.parse_args()
 
 from torchvision import datasets, transforms
 from torch.utils.data import DataLoader
@@ -17,7 +30,7 @@ import time
 
 if __name__ == "__main__":
 
-    epoches = int(sys.argv[-1])
+    epoches = int(args.iters)
 
     loading_transform = transforms.Compose(
         [transforms.Grayscale(), transforms.ToTensor()]

@@ -1,3 +1,4 @@
+import argparse
 import cv2
 import time
 import torch
@@ -19,9 +20,7 @@ def crop_to_square(frame):
     return cropped_frame
 
 
-def take_picture_and_resize(
-    filename="captured_image.jpg", delay=5, target_size=(48, 48)
-):
+def take_picture_and_resize(filename, delay=5, target_size=(48, 48)):
     cap = cv2.VideoCapture(0)
 
     if not cap.isOpened():
@@ -52,9 +51,10 @@ def take_picture_and_resize(
             break
 
     square_frame = crop_to_square(frame)
+    cv2.imwrite(filename + ".jpg", square_frame)
     resized_frame = cv2.resize(square_frame, target_size)
 
-    cv2.imwrite(filename, resized_frame)
+    cv2.imwrite("face.jpg", resized_frame)
     print(f"Slika je sacuvana: {filename}.")
 
     cap.release()
@@ -63,8 +63,6 @@ def take_picture_and_resize(
 
 def load_image_as_tensor_opencv(image_path):
     image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
-
-    # image_resized = cv2.resize(image, (48, 48))
 
     transform = transforms.Compose(
         [
@@ -82,9 +80,24 @@ def load_image_as_tensor_opencv(image_path):
 
 
 if __name__ == "__main__":
-    take_picture_and_resize()
 
-    tensor_image = load_image_as_tensor_opencv("./captured_image.jpg")
+    parser = argparse.ArgumentParser(
+        description="Face expression and emotion recognition of the user."
+    )
+
+    parser.add_argument(
+        "--save_name",
+        type=str,
+        required=False,
+        help="Optional name for saving the picture",
+        default="captured_image.jpg",
+    )
+
+    args = parser.parse_args()
+
+    take_picture_and_resize(filename=args.save_name)
+
+    tensor_image = load_image_as_tensor_opencv("./face.jpg")
     emotions = {
         0: "Angry",
         1: "Disgust",
